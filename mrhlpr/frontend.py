@@ -145,8 +145,10 @@ def parse_args():
     # Checkout
     checkout = sub.add_parser("checkout",
                               help="add and switch to the MR's branch")
-    checkout.add_argument("-f", "--fetch", action="store_true",
-                          help="always fetch the remote repository")
+    checkout.add_argument("-n", "--no-fetch", action="store_false",
+                          dest="fetch",
+                          help="do not fetch the remote and origin"
+                               " repositories")
     checkout.add_argument("-o", "--overwrite-remote", action="store_true",
                           help="overwrite the remote URLs if they differ")
     checkout.add_argument("mr_id", type=int, help="merge request ID")

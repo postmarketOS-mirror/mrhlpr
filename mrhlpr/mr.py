@@ -120,6 +120,11 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
             print("mrhlpr will also set this pushurl: " + url_push)
             exit(1)
 
+    # Fetch origin
+    if fetch and remote != origin["project"]:
+        print("Fetch " + git.get_remote_url())
+        git.run(["fetch", "origin"])
+
     # Add missing remote
     if not existing:
         git.run(["remote", "add", remote_local, url])
