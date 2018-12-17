@@ -119,7 +119,6 @@ def print_status(mr_id, no_cache=False):
         print("* Add the MR-ID to all commits ('mrhlpr fixmsg')")
         return
 
-    print("* Origin up-to-date? ('git fetch origin')")
     print("* Pretty 'git log'? (consider copying MR desc)")
     print("* Push your changes ('git push --force')")
     print("* Web UI: comment about your reviewing and testing")
