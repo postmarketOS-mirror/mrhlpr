@@ -27,7 +27,7 @@ def get_status(mr_id, no_cache=False):
                   {"title": "This is my first merge request",
                    "branch": "mymr",
                    "source": "ollieparanoid/mrhlpr",
-                   "source_project": "ollieparanoid", ### FIXME
+                   "source_namespace": "ollieparanoid",
                    "allow_push": True,
                    "state": "merged"} """
     # Query merge request
