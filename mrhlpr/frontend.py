@@ -22,6 +22,11 @@ def print_status(mr_id, no_cache=False):
         :param mr_id: merge request ID
         :param no_cache: do not cache the API result for the merge request data
     """
+    if not mr_id:
+        print("ERROR: can't associate the current branch with a merge request"
+              " ID. Run 'mrhlpr checkout N' first (N is the MR-ID).")
+        exit(1)
+
     status = mr.get_status(mr_id, no_cache)
     is_checked_out = mr.checked_out() == mr_id
     is_rebased = None
