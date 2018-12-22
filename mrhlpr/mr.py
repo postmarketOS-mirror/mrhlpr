@@ -165,8 +165,7 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
             print("ERROR: checkout failed.")
             print("* Does that branch still exist?")
             print("* Maybe the MR has been closed/merged already?")
-            print("* Consider fetching the remote ('mrhlpr checkout " +
-                  str(mr_id) + " -f')")
+            print("* Do you have unstaged commits that would be overwritten?")
             exit(1)
 
     # Save in mrdb
