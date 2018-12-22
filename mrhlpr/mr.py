@@ -154,7 +154,7 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
             print("Consider deleting this branch and trying again:")
             print("$ git checkout master")
             print("$ git branch -D " + branch_local)
-            print("$ mrhlpr checkout " + str(mr_id))
+            print("$ mrhlpr checkout " + str(mr_id) + " -n")
             exit(1)
         git.run(["checkout", branch_local])
     else:
