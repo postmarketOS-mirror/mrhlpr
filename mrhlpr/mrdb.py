@@ -1,4 +1,4 @@
-# Copyright 2018 Oliver Smith
+# Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 """ Simple lookup table on disk for local (host, project, branch) to MR ID. """
 

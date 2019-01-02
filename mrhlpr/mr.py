@@ -1,4 +1,4 @@
-# Copyright 2018 Oliver Smith
+# Copyright 2019 Oliver Smith
 # SPDX-License-Identifier: GPL-3.0-or-later
 """ High level merge request related functions on top of git, gitlab, mrdb. """
 
