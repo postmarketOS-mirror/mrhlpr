@@ -99,7 +99,7 @@ def print_status(mr_id, no_cache=False):
     if not status["allow_push"]:
         print("* Ask MR author to tick 'Allow commits from members who can"
               " merge to the target branch.'")
-        print("* Check again ('mrhlpr -n status " + str(mr_id) + "')")
+        print("* Check again ('mrhlpr -n status')")
         return
 
     if not is_checked_out:
