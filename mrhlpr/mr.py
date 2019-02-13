@@ -80,13 +80,16 @@ def get_status(mr_id, no_cache=False):
             "state": api["state"]}
 
 
-def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
+def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False,
+             reset_hard=False):
     """ Add the MR's source repository as git remote, fetch it and checkout the
         branch used in the merge request.
         :param mr_id: merge request ID
         :param no_cache: do not cache the API result for the merge request data
         :param fetch: always fetch the source repository
-        :param overwrite_remote: overwrite URLs of existing remote """
+        :param overwrite_remote: overwrite URLs of existing remote
+        :param reset_hard: reset local branch to remote branch if already
+                           checked out """
     status = get_status(mr_id, no_cache)
     remote, repo = status["source"].split("/", 2)
     origin = gitlab.parse_git_origin()
@@ -157,6 +160,12 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
             print("$ mrhlpr checkout " + str(mr_id) + " -n")
             exit(1)
         git.run(["checkout", branch_local])
+
+        if reset_hard:
+            current_rev = git.run(["rev-parse", "HEAD"])
+            print("Reset local branch to remote branch, undo with: 'git"
+                  " reset " + current_rev + "' <--- IMPORTANT!")
+            git.run(["reset", "--hard", remote_local + "/" + branch])
     else:
         git.run(["checkout", "-b", branch_local, remote_local + "/" + branch],
                 check=False)

@@ -155,6 +155,9 @@ def parse_args():
                                " repositories")
     checkout.add_argument("-o", "--overwrite-remote", action="store_true",
                           help="overwrite the remote URLs if they differ")
+    checkout.add_argument("--reset-hard", action="store_true",
+                          help="reset local branch to remote branch if already"
+                               " checked out")
     checkout.add_argument("mr_id", type=int, help="merge request ID")
 
     # Fixmsg
@@ -174,7 +177,7 @@ def main():
         print_status(mr_id, args.no_cache)
     elif args.action == "checkout":
         mr.checkout(args.mr_id, args.no_cache, args.fetch,
-                    args.overwrite_remote)
+                    args.overwrite_remote, args.reset_hard)
         print_status(args.mr_id)
     elif args.action == "fixmsg":
         mr_id = mr.checked_out()
