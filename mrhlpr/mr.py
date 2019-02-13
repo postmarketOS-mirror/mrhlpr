@@ -161,11 +161,22 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False,
             exit(1)
         git.run(["checkout", branch_local])
 
-        if reset_hard:
-            current_rev = git.run(["rev-parse", "HEAD"])
-            print("Reset local branch to remote branch, undo with: 'git"
-                  " reset " + current_rev + "' <--- IMPORTANT!")
-            git.run(["reset", "--hard", remote_local + "/" + branch])
+        # Compare revisions (reset hard if desired)
+        rev_current = git.run(["rev-parse", "HEAD"])
+        rev_remote = git.run(["rev-parse", remote_local + "/" + branch])
+        if rev_current == rev_remote:
+            if reset_hard:
+                print("NOTE: local branch is on same revision as local branch,"
+                      " '--reset-hard' ignored")
+        else:
+            if reset_hard:
+                print("Reset local branch to remote branch, undo with: 'git"
+                      " reset " + rev_current + "' <--- IMPORTANT!")
+                git.run(["reset", "--hard", rev_remote])
+            else:
+                print("WARNING: local branch exists and differs from remote"
+                      " branch! Consider using: 'mrhlpr checkout " +
+                      str(mr_id) + " --reset-hard' <--- IMPORTANT!")
     else:
         git.run(["checkout", "-b", branch_local, remote_local + "/" + branch],
                 check=False)
