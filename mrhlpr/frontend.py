@@ -161,7 +161,7 @@ def parse_args():
     checkout.add_argument("mr_id", type=int, help="merge request ID")
 
     # Fixmsg
-    sub.add_parser("fixmsg", help="add the MR-ID to all commits")
+    sub.add_parser("fixmsg", help="add the MR-ID to all commits and sign them")
 
     if argcomplete:
         argcomplete.autocomplete(parser, always_complete_options="long")

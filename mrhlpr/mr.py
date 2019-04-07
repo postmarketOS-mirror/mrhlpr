@@ -4,6 +4,7 @@
 
 import os
 import re
+import subprocess
 
 from . import git
 from . import gitlab
@@ -216,6 +217,12 @@ def fixmsg(mr_id):
                               "/../data/msg_filter.py")
     os.chdir(git.run(["rev-parse", "--show-toplevel"]))
 
-    print("Appending ' (!" + str(mr_id) + ")' to all commits...")
-    git.run(["filter-branch", "-f", "--msg-filter", script,
-             "origin/master..HEAD"])
+    print("Appending ' (!" + str(mr_id) + ")' to commits and signing them...")
+    try:
+        git.run(["filter-branch", "-f", "--msg-filter", script,
+                 "--commit-filter", "git commit-tree -S \"$@\"",
+                 "origin/master..HEAD"])
+    except subprocess.CalledProcessError:
+        print("ERROR: git filter-branch failed. Do you have git commit signing"
+              " set up properly? (Run with -v to see the failing command.)")
+        exit(1)
