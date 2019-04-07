@@ -5,10 +5,11 @@ Lightweight script to support maintainers of postmarketOS in the merge workflow 
 The workflow looks like this:
 1. Checkout the merge request locally (`mrhlpr checkout 123`).
 2. Rebase on latest master (`git rebase master`).
-3. Add the MR-ID to all commit messages (`mrhlpr fixmsg`).
+3. Add the MR-ID to all commit messages and sign them (`mrhlpr fixmsg`).
 4. Optionally squash all commits (`git rebase -i master`).
-5. If everything looks good force push (`git push --force`).
-6. In the GitLab web UI: wait for CI, then merge.
+5. Check if everything is fine (`mrhlpr status`).
+6. If everything looks good force push (`git push --force`).
+7. In the GitLab web UI: wait for CI, then merge.
 
 ## installation
 Same as for pmbootstrap: clone the repo, create a symlink to `mrhlpr.py` in your `PATH`. Optionally set up autocompletion with argcomplete. See pmbootstrap's [manual installation instructions](https://wiki.postmarketos.org/wiki/Installing_pmbootstrap#Installing_Manually) for details.
@@ -32,6 +33,7 @@ https://gitlab.com/postmarketOS/pmaports/merge_requests/81
 [OK ] Clean worktree
 [NOK] Rebase on master
 [NOK] MR-ID in commit msgs
+[NOK] Commits are signed
 
 Checklist:
 * 10 commits: consider squashing ('git rebase -i origin/master')
@@ -51,9 +53,10 @@ https://gitlab.com/postmarketOS/pmaports/merge_requests/81
 [OK ] Clean worktree
 [OK ] Rebase on master
 [NOK] MR-ID in commit msgs
+[NOK] Commits are signed
 
 Checklist:
-* Add the MR-ID to all commits ('mrhlpr fixmsg')
+* Add the MR-ID to all commits and sign them ('mrhlpr fixmsg')
 ```
 
 ```shell-session
@@ -68,6 +71,7 @@ https://gitlab.com/postmarketOS/pmaports/merge_requests/81
 [OK ] Clean worktree
 [OK ] Rebase on master
 [OK ] MR-ID in commit msgs
+[OK ] Commits are signed
 
 Checklist:
 * Origin up-to-date? ('git fetch origin')
