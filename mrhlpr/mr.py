@@ -204,6 +204,15 @@ def commits_have_mr_id(commits, mr_id):
     return True
 
 
+def commits_are_signed(commits):
+    """ Check if all given commits are signed.
+        :param commits: return value from git.commits_on_top_of_master()
+        :returns: True if all are signed, False otherwise """
+    for commit in commits:
+        if not git.run(["verify-commit", commit], False):
+            return False
+    return True
+
 def fixmsg(mr_id):
     """ Add the MR-ID in each commit of the MR.
         :param mr_id: merge request ID """

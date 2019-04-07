@@ -33,6 +33,7 @@ def print_status(mr_id, no_cache=False):
     clean_worktree = None
     commits = []
     commits_have_id = None
+    commits_are_signed = None
 
     # Generate URL
     origin = gitlab.parse_git_origin()
@@ -48,6 +49,7 @@ def print_status(mr_id, no_cache=False):
         clean_worktree = git.clean_worktree()
         commits = git.commits_on_top_of_master()
         commits_have_id = mr.commits_have_mr_id(commits, mr_id)
+        commits_are_signed = mr.commits_are_signed(commits)
         print("{} commit{} from {}/{}".format(len(commits),
                                               "s" if len(commits) > 1 else "",
                                               status["source_namespace"],
@@ -93,6 +95,14 @@ def print_status(mr_id, no_cache=False):
     else:
         print("[NOK] MR-ID in commit msgs")
 
+    # Commits are signed
+    if commits_are_signed is None:
+        print("[???] Commits are signed")
+    elif commits_are_signed:
+        print("[OK ] Commits are signed")
+    else:
+        print("[NOK] Commits are signed")
+
     # Checklist
     print()
     print("Checklist:")
@@ -120,8 +130,8 @@ def print_status(mr_id, no_cache=False):
         print("* Check again ('mrhlpr status')")
         return
 
-    if not commits_have_id:
-        print("* Add the MR-ID to all commits ('mrhlpr fixmsg')")
+    if not commits_have_id or not commits_are_signed:
+        print("* Add the MR-ID to all commits and sign them ('mrhlpr fixmsg')")
         return
 
     print("* Pretty 'git log'? (consider copying MR desc)")
