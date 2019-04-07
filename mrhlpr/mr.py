@@ -213,6 +213,7 @@ def commits_are_signed(commits):
             return False
     return True
 
+
 def fixmsg(mr_id):
     """ Add the MR-ID in each commit of the MR.
         :param mr_id: merge request ID """
