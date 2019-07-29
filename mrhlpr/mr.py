@@ -81,16 +81,13 @@ def get_status(mr_id, no_cache=False):
             "state": api["state"]}
 
 
-def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False,
-             reset_hard=False):
+def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
     """ Add the MR's source repository as git remote, fetch it and checkout the
         branch used in the merge request.
         :param mr_id: merge request ID
         :param no_cache: do not cache the API result for the merge request data
         :param fetch: always fetch the source repository
-        :param overwrite_remote: overwrite URLs of existing remote
-        :param reset_hard: reset local branch to remote branch if already
-                           checked out """
+        :param overwrite_remote: overwrite URLs of existing remote """
     status = get_status(mr_id, no_cache)
     remote, repo = status["source"].split("/", 2)
     origin = gitlab.parse_git_origin()
@@ -162,22 +159,18 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False,
             exit(1)
         git.run(["checkout", branch_local])
 
-        # Compare revisions (reset hard if desired)
+        # Compare revisions (reset hard if needed)
         rev_current = git.run(["rev-parse", "HEAD"])
         rev_remote = git.run(["rev-parse", remote_local + "/" + branch])
         if rev_current == rev_remote:
-            if reset_hard:
-                print("NOTE: local branch is on same revision as local branch,"
-                      " '--reset-hard' ignored")
+            print("(Most recent commit is already checked out.)")
         else:
-            if reset_hard:
-                print("Reset local branch to remote branch, undo with: 'git"
-                      " reset " + rev_current + "' <--- IMPORTANT!")
-                git.run(["reset", "--hard", rev_remote])
-            else:
-                print("WARNING: local branch exists and differs from remote"
-                      " branch! Consider using: 'mrhlpr checkout " +
-                      str(mr_id) + " --reset-hard' <--- IMPORTANT!")
+            print("################")
+            print("NOTE: branch " + branch_local + " already exists, reusing.")
+            print("You can go back to the previous commit with:")
+            print("$ git reset --hard " + rev_current)
+            print("################")
+            git.run(["reset", "--hard", rev_remote])
     else:
         git.run(["checkout", "-b", branch_local, remote_local + "/" + branch],
                 check=False)
