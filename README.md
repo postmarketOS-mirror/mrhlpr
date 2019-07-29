@@ -11,10 +11,10 @@ The workflow looks like this:
 6. If everything looks good force push (`git push --force`).
 7. In the GitLab web UI: wait for CI, then merge.
 
-## installation
+## Installation
 Same as for pmbootstrap: clone the repo, create a symlink to `mrhlpr.py` in your `PATH`. Optionally set up autocompletion with argcomplete. See pmbootstrap's [manual installation instructions](https://wiki.postmarketos.org/wiki/Installing_pmbootstrap#Installing_Manually) for details.
 
-## example session
+## Example Session
 
 Start with `mrhlpr checkout` and the MR-ID. The built-in checklist will tell the next steps. All API requests get cached on disk.
 
@@ -83,11 +83,11 @@ Checklist:
 * Web UI: do (automatic) merge
 ```
 
-### portability
+### Portability
 
 This script is not postmarketOS specific, it should work with any GitLab repository. Right now, only gitlab.com is detected - but detecting any GitLab servers could be added in `mrhlpr/gitlab.py:parse_git_origin()` if desired.
 
 
-### troubleshooting
+### Troubleshooting
 
 `mrhlpr -v` displays debug log messages, such as all git commands and their output, as well as the locations of all http cache files.
