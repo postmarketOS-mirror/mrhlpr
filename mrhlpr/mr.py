@@ -89,7 +89,7 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
         :param fetch: always fetch the source repository
         :param overwrite_remote: overwrite URLs of existing remote """
     status = get_status(mr_id, no_cache)
-    remote, repo = status["source"].split("/", 2)
+    remote, repo = status["source"].split("/", 1)
     origin = gitlab.parse_git_origin()
     branch = status["branch"]
 
