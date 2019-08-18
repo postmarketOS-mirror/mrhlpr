@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """ High level merge request related functions on top of git, gitlab, mrdb. """
 
+import json
+import logging
 import os
 import re
 import subprocess
@@ -195,6 +197,62 @@ def commits_have_mr_id(commits, mr_id):
         if not subject.endswith(" (!" + str(mr_id) + ")"):
             return False
     return True
+
+
+def commits_follow_format(commits):
+    """ Check if the commit subjects follow the correct naming format.
+        :param commits: return value from git.commits_on_top_of_master()
+        :returns: True if the commits are formatted correctly, False if
+                  something is obviously wrong and None if it is something
+                  between """
+
+    subjects = []
+    for commit in commits:
+        subjects.append(git.run(["show", "-s", "--format=%s", commit]))
+
+    # Run generic checks that don't need definitions first
+    for subject in subjects:
+
+        # Don't have an period at the end of the subject
+        if subject.endswith("."):
+            return False
+
+    # Load a definition file from the root of the repo if it exists
+    definition_file = os.path.join(git.topdir(), '.mrhlpr.json')
+    if not os.path.isfile(definition_file):
+        return None
+
+    with open(definition_file) as handle:
+        definitions = json.load(handle)
+
+    regexes_pass = []
+    for regex in definitions['subject_format']['pass']:
+        regexes_pass.append(re.compile(regex))
+
+    regexes_unknown = []
+    for regex in definitions['subject_format']['unknown']:
+        regexes_unknown.append(re.compile(regex))
+
+    result = True
+
+    for subject in subjects:
+        logging.debug('Checking subject: {}'.format(subject))
+        for regex in regexes_pass:
+            if regex.match(subject):
+                logging.debug('  Matched pass regex {}'.format(regex.pattern))
+                break
+        else:
+            for regex in regexes_unknown:
+                logging.debug(
+                    '  Matched unknown regex {}'.format(regex.pattern))
+                if regex.match(subject):
+                    result = None
+                    break
+            else:
+                logging.debug('  No regex matched')
+                return False
+
+    return result
 
 
 def commits_are_signed(commits):

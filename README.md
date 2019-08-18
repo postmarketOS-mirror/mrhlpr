@@ -14,6 +14,24 @@ The workflow looks like this:
 ## Installation
 Same as for pmbootstrap: clone the repo, create a symlink to `mrhlpr.py` in your `PATH`. Optionally set up autocompletion with argcomplete. See pmbootstrap's [manual installation instructions](https://wiki.postmarketos.org/wiki/Installing_pmbootstrap#Installing_Manually) for details.
 
+Optionally you can add a `.mrhlpr.json` file to your respository, this contains extra verification rules specific to your repository. An example file:
+
+```json
+{
+    "subject_format": {
+        "pass": [
+            "^[a-z]+/[a-z-0-9*{}]+: new aport(s|)( \\(!\\d+\\)|)$",
+            "^[a-z]+/[a-z-0-9*{}]+: pkgrel bump( \\(!\\d+\\)|)$",
+            "^[a-z-0-9*{}]+: new device \\([^\\)]+\\)( \\(!\\d+\\)|)",
+            "^[a-z]+/[a-z-0-9*{}]+: upgrade to [0-9\\.a-z\\-_]+( \\(!\\d+\\)|)$"
+        ],
+        "unknown": [
+            "^[a-z-0-9*{}\\/]+: [a-z\\-0-9*{}\\(\\)\\._ ]+( \\(!\\d+\\)|)$"
+        ]
+    }
+}
+```
+
 ## Example Session
 
 Start with `mrhlpr checkout` and the MR-ID. The built-in checklist will tell the next steps. All API requests get cached on disk.

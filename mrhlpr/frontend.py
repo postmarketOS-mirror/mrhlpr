@@ -49,6 +49,7 @@ def print_status(mr_id, no_cache=False):
         clean_worktree = git.clean_worktree()
         commits = git.commits_on_top_of_master()
         commits_have_id = mr.commits_have_mr_id(commits, mr_id)
+        commits_follow_format = mr.commits_follow_format(commits)
         commits_are_signed = mr.commits_are_signed(commits)
         print("{} commit{} from {}/{}".format(len(commits),
                                               "s" if len(commits) > 1 else "",
@@ -95,6 +96,14 @@ def print_status(mr_id, no_cache=False):
     else:
         print("[NOK] MR-ID in commit msgs")
 
+    # All commits follow formatting
+    if commits_follow_format is None:
+        print("[???] Commit subjects follow format")
+    elif commits_follow_format:
+        print("[OK ] Commit subjects follow format")
+    else:
+        print("[NOK] Commit subjects follow format")
+
     # Commits are signed
     if commits_are_signed is None:
         print("[???] Commits are signed")
@@ -133,6 +142,13 @@ def print_status(mr_id, no_cache=False):
     if not commits_have_id or not commits_are_signed:
         print("* Add the MR-ID to all commits and sign them ('mrhlpr fixmsg')")
         return
+
+    if commits_follow_format is False:
+        print("* Fix commit subjects that don't follow the correct formatting")
+        return
+
+    if commits_follow_format is None:
+        print("* Manually check if the commit subjects are correct")
 
     print("* Pretty 'git log'? (consider copying MR desc)")
     print("* Push your changes ('git push --force')")

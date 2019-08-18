@@ -63,3 +63,8 @@ def is_rebased_on_master():
 def clean_worktree():
     """ Check if there are not modified files in the git dir. """
     return run(["status", "--porcelain"]) == ""
+
+
+def topdir():
+    """ :returns: current branch name (if any) or "HEAD" """
+    return run(["rev-parse", "--show-toplevel"])
