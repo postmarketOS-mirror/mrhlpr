@@ -222,7 +222,7 @@ def commits_follow_format(commits):
     # Load a definition file from the root of the repo if it exists
     definition_file = os.path.join(git.topdir(), '.mrhlpr.json')
     if not os.path.isfile(definition_file):
-        return None
+        return (True, "")
 
     with open(definition_file) as handle:
         definitions = json.load(handle)
