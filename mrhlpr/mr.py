@@ -202,20 +202,22 @@ def commits_have_mr_id(commits, mr_id):
 def commits_follow_format(commits):
     """ Check if the commit subjects follow the correct naming format.
         :param commits: return value from git.commits_on_top_of_master()
-        :returns: True if the commits are formatted correctly, False if
-                  something is obviously wrong and None if it is something
-                  between """
-
-    subjects = []
+        :returns: (result, subject_err)
+                  result: True if the commits are formatted correctly, False if
+                          something is obviously wrong and None if it is
+                          something between
+                  subject_err: string with commit hash and explanation of what
+                               is wrong with the subject """
+    subjects = {}
     for commit in commits:
-        subjects.append(git.run(["show", "-s", "--format=%s", commit]))
+        subjects[commit] = git.run(["show", "-s", "--format=%s", commit])
 
     # Run generic checks that don't need definitions first
-    for subject in subjects:
+    for commit, subject in subjects.items():
 
         # Don't have an period at the end of the subject
         if subject.endswith("."):
-            return False
+            return (False, commit[0:6] + " ends with period")
 
     # Load a definition file from the root of the repo if it exists
     definition_file = os.path.join(git.topdir(), '.mrhlpr.json')
@@ -234,8 +236,9 @@ def commits_follow_format(commits):
         regexes_unknown.append(re.compile(regex))
 
     result = True
+    subj_err = ""
 
-    for subject in subjects:
+    for commit, subject in subjects.items():
         logging.debug('Checking subject: {}'.format(subject))
         for regex in regexes_pass:
             if regex.match(subject):
@@ -247,12 +250,14 @@ def commits_follow_format(commits):
                     logging.debug(
                         '  Matched unknown regex {}'.format(regex.pattern))
                     result = None
+                    if not subj_err:
+                        subj_err = commit[0:6] + " matches " + regex.pattern
                     break
             else:
                 logging.debug('  No regex matched')
-                return False
+                return (False, commit[0:6] + " doesn't match any regex")
 
-    return result
+    return (result, subj_err)
 
 
 def commits_are_signed(commits):

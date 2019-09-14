@@ -49,7 +49,7 @@ def print_status(mr_id, no_cache=False):
         clean_worktree = git.clean_worktree()
         commits = git.commits_on_top_of_master()
         commits_have_id = mr.commits_have_mr_id(commits, mr_id)
-        commits_follow_format = mr.commits_follow_format(commits)
+        commits_follow_format, subj_err = mr.commits_follow_format(commits)
         commits_are_signed = mr.commits_are_signed(commits)
         print("{} commit{} from {}/{}".format(len(commits),
                                               "s" if len(commits) > 1 else "",
@@ -98,11 +98,11 @@ def print_status(mr_id, no_cache=False):
 
     # All commits follow formatting
     if commits_follow_format is None:
-        print("[???] Commit subjects follow format")
+        print("[???] Commit subjects follow format (" + subj_err + ")")
     elif commits_follow_format:
         print("[OK ] Commit subjects follow format")
     else:
-        print("[NOK] Commit subjects follow format")
+        print("[NOK] Commit subjects follow format (" + subj_err + ")")
 
     # Commits are signed
     if commits_are_signed is None:
