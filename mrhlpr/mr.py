@@ -243,9 +243,9 @@ def commits_follow_format(commits):
                 break
         else:
             for regex in regexes_unknown:
-                logging.debug(
-                    '  Matched unknown regex {}'.format(regex.pattern))
                 if regex.match(subject):
+                    logging.debug(
+                        '  Matched unknown regex {}'.format(regex.pattern))
                     result = None
                     break
             else:
