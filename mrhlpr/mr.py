@@ -7,6 +7,7 @@ import logging
 import os
 import re
 import subprocess
+import sys
 
 from . import git
 from . import gitlab
@@ -135,7 +136,14 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
         fetch = True
     if fetch:
         print("Fetch " + url)
-        git.run(["fetch", remote_local])
+        try:
+            git.run(["fetch", remote_local])
+        except subprocess.CalledProcessError:
+            print("Failed to fetch from remote. Try running 'git fetch " +
+                  remote_local + "' manually and check the output, most"
+                  " likely you ran into this problem:"
+                  " https://gitlab.com/postmarketOS/mrhlpr/issues/1")
+            sys.exit(1)
 
     # Always prepend the remote before "master"
     branch_local = branch
