@@ -150,6 +150,9 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
     if branch == "master":
         branch_local = remote + "-" + branch
 
+    # Replace slashes in branch names (#1)
+    branch_local = branch_local.replace("/", "-")
+
     # Checkout the branch
     print("Checkout " + branch_local + " from " + remote + "/" + branch)
     if branch_local in git.branches():
