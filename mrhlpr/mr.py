@@ -195,6 +195,12 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
             print("* Do you have unstaged commits that would be overwritten?")
             exit(1)
 
+    # Set upstream branch (git will still complain with "The upstream branch
+    # of your current branch does not match the name of your current branch",
+    # unless "git config push.default upstream" is set. There doesn't seem to
+    # be a way around that.)
+    git.run(["branch", "-u", remote_local + "/" + branch])
+
     # Save in mrdb
     mrdb.set(origin["host"], origin["project_id"], branch_local, mr_id)
 
