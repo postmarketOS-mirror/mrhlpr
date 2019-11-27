@@ -4,7 +4,6 @@ Lightweight script to support maintainers of postmarketOS in the merge workflow 
 
 After installing mrhlpr (see below) and [configuring a gpg key](https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work) to use with git, this is the basic workflow. Further below is a full example session with example output.
 
-The workflow looks like this:
 0. Use `cd` to enter a locally cloned git repository (e.g. `pmaports.git`).
 1. Checkout the merge request locally (`mrhlpr checkout 123`).
 2. Rebase on latest master (`git rebase master`).
