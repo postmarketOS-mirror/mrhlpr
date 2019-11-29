@@ -103,8 +103,9 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
 
     # Check existing remote
     project_repo_git = "{}/{}.git".format(remote, repo)
-    url = "https://" + origin["host"] + "/" + project_repo_git
-    url_push = "git@" + origin["host"] + ":" + project_repo_git
+    username = (origin["username"] + "@" if origin["username"] else "")
+    url = "https://" + username + origin["host"] + "/" + project_repo_git
+    url_push = "git@" + username + origin["host"] + ":" + project_repo_git
     existing = git.get_remote_url(remote_local)
     if existing and existing != url:
         if overwrite_remote:

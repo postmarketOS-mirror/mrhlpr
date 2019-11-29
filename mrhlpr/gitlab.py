@@ -9,6 +9,7 @@ import os
 import shutil
 import json
 import logging
+import re
 
 from . import git
 
@@ -70,13 +71,14 @@ def parse_git_origin():
         exit(1)
 
     # Find the host (gitlab.com only so far)
-    prefixes = ["git@gitlab.com:", "https://gitlab.com/"]
+    prefixes = [r"^git@gitlab.com:",
+                r"^https:\/\/(?:[^\s\@\/]*@)?gitlab\.com\/"]
     host = None
     rest = None
     for prefix in prefixes:
-        if url.startswith(prefix):
+        if re.search(prefix, url):
             host = "gitlab.com"
-            rest = url[len(prefix):]
+            rest = re.sub(prefix, "", url)
     if not host:
         print("Failed to extract gitlab server from: " + url)
         exit(1)
@@ -90,10 +92,14 @@ def parse_git_origin():
     api = "https://" + host + "/api/v4"
     api_project_id = urllib.parse.quote_plus(project_id)
 
+    # Find username
+    username = re.search(r"^https:\/\/([^\s\@\/]*)@gitlab\.com\/", url)
+
     # Return everything
     return {"api": api,
             "api_project_id": api_project_id,
             "full": url,
             "project": project_id.split("/", 1)[0],
             "project_id": project_id,
-            "host": host}
+            "host": host,
+            "username": username and username.group(1)}
