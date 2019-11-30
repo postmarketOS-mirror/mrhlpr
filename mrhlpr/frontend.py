@@ -154,7 +154,6 @@ def print_status(mr_id, no_cache=False):
     print("* Push your changes ('git push --force')")
     print("* Web UI: comment about your reviewing and testing")
     print("* Web UI: approve MR")
-    print("* Web UI: adjust MR squash settings (remember the GitLab bug)")
     print("* Web UI: do (automatic) merge")
 
 

@@ -81,7 +81,6 @@ Checklist:
 * Push your changes ('git push --force')
 * Web UI: comment about your reviewing and testing
 * Web UI: approve MR
-* Web UI: adjust MR squash settings (remember the GitLab bug)
 * Web UI: do (automatic) merge
 ```
 
