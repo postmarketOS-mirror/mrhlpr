@@ -154,9 +154,15 @@ def print_status(mr_id, no_cache=False):
     if commits_follow_format is None:
         print("* Manually check if the commit subjects are correct")
 
+    origin = gitlab.parse_git_origin()
+    remote_local = status["source"].split("/", 1)[0]
+    if remote_local == origin["project"]:
+        remote_local = "origin"
+
     print("* Pretty 'git log -" + str(len(commits)) + " --pretty'?" +
           " (consider copying MR desc)")
-    print("* Push your changes ('git push --force')")
+    print("* Push your changes ('git push --force " + remote_local + " HEAD:" +
+          status["branch"] + "')")
     print("* Web UI: comment about your reviewing and testing")
     print("* Web UI: approve MR")
     print("* Web UI: do (automatic) merge")

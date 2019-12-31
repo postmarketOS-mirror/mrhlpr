@@ -146,13 +146,7 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
                   " https://gitlab.com/postmarketOS/mrhlpr/issues/1")
             sys.exit(1)
 
-    # Always prepend the remote before "master"
-    branch_local = branch
-    if branch == "master":
-        branch_local = remote + "-" + branch
-
-    # Replace slashes in branch names (#1)
-    branch_local = branch_local.replace("/", "-")
+    branch_local = "mrhlpr/" + str(mr_id)
 
     # Checkout the branch
     print("Checkout " + branch_local + " from " + remote + "/" + branch)
