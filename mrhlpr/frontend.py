@@ -98,11 +98,15 @@ def print_status(mr_id, no_cache=False):
 
     # All commits follow formatting
     if commits_follow_format is None:
-        print("[???] Commit subjects follow format (" + subj_err + ")")
+        print("[???] Commit subjects follow format")
+        for line in subj_err:
+            print("   " + line)
     elif commits_follow_format:
         print("[OK ] Commit subjects follow format")
     else:
-        print("[NOK] Commit subjects follow format (" + subj_err + ")")
+        print("[NOK] Commit subjects follow format")
+        for line in subj_err:
+            print("   " + line)
 
     # Commits are signed
     if commits_are_signed is None:

@@ -235,12 +235,12 @@ def commits_follow_format(commits):
 
         # Don't have an period at the end of the subject
         if subject.endswith("."):
-            return (False, commit[0:6] + " ends with period")
+            return (False, [commit[0:6] + " ends with period"])
 
     # Load a definition file from the root of the repo if it exists
     definition_file = os.path.join(git.topdir(), '.mrhlpr.json')
     if not os.path.isfile(definition_file):
-        return (True, "")
+        return (True, [])
 
     with open(definition_file) as handle:
         definitions = json.load(handle)
@@ -254,7 +254,7 @@ def commits_follow_format(commits):
         regexes_unknown.append(re.compile(regex))
 
     result = True
-    subj_err = ""
+    subj_err = []
 
     for commit, subject in subjects.items():
         logging.debug('Checking subject: {}'.format(subject))
@@ -268,12 +268,11 @@ def commits_follow_format(commits):
                     logging.debug(
                         '  Matched unknown regex {}'.format(regex.pattern))
                     result = None
-                    if not subj_err:
-                        subj_err = commit[0:6] + " matches " + regex.pattern
+                    subj_err.append(commit[0:6] + " matches " + regex.pattern)
                     break
             else:
                 logging.debug('  No regex matched')
-                return (False, commit[0:6] + " doesn't match any regex")
+                return (False, [commit[0:6] + " doesn't match any regex"])
 
     return (result, subj_err)
 
