@@ -154,7 +154,8 @@ def print_status(mr_id, no_cache=False):
     if commits_follow_format is None:
         print("* Manually check if the commit subjects are correct")
 
-    print("* Pretty 'git log'? (consider copying MR desc)")
+    print("* Pretty 'git log -" + str(len(commits)) + " --pretty'?" +
+          " (consider copying MR desc)")
     print("* Push your changes ('git push --force')")
     print("* Web UI: comment about your reviewing and testing")
     print("* Web UI: approve MR")
