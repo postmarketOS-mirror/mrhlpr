@@ -15,7 +15,7 @@ if not os.getenv("MRHLPR_MSG_FILTER_MR_ID"):
 
 
 line_number = 0
-suffix = " (!" + os.getenv("MRHLPR_MSG_FILTER_MR_ID") + ")"
+suffix = " (MR " + os.getenv("MRHLPR_MSG_FILTER_MR_ID") + ")"
 for line in sys.stdin:
     line = line.rstrip()
     line_number += 1
