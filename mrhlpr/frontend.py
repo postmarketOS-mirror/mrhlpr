@@ -43,7 +43,7 @@ def print_status(mr_id, no_cache=False):
     # Header
     print(url)
     print()
-    print("\"" + status["title"] + "\"" + " (!" + str(mr_id) + ")")
+    print("\"" + status["title"] + "\"" + " (MR " + str(mr_id) + ")")
     if is_checked_out:
         is_rebased = git.is_rebased_on_master()
         clean_worktree = git.clean_worktree()
