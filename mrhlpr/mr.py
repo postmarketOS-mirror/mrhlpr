@@ -206,7 +206,7 @@ def commits_have_mr_id(commits, mr_id):
         :returns: True if the MR-ID is in each subject, False otherwise """
     for commit in commits:
         subject = git.run(["show", "-s", "--format=%s", commit])
-        if not subject.endswith(" (!" + str(mr_id) + ")"):
+        if not subject.endswith(" (MR " + str(mr_id) + ")"):
             return False
     return True
 
@@ -294,7 +294,7 @@ def fixmsg(mr_id):
                               "/../data/msg_filter.py")
     os.chdir(git.run(["rev-parse", "--show-toplevel"]))
 
-    print("Appending ' (!" + str(mr_id) + ")' to commits and signing them...")
+    print("Appending ' (MR " + str(mr_id) + ")' to commits and signing them...")  # noqa: E501
     try:
         git.run(["filter-branch", "-f", "--msg-filter", script,
                  "--commit-filter", "git commit-tree -S \"$@\"",
