@@ -96,6 +96,12 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
     origin = gitlab.parse_git_origin()
     branch = status["branch"]
 
+    # Require clean worktree
+    if not git.clean_worktree():
+        print("ERROR: worktree is not clean! Commit or stash your changes")
+        print("and try again. See 'git status' for details.")
+        exit(1)
+
     # Don't add the origin remote twice
     remote_local = remote
     if remote == origin["project"]:
