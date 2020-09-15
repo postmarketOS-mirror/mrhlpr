@@ -298,6 +298,7 @@ def fixmsg(mr_id):
         print("ERROR: no merge request is currently checked out.")
         print("Run 'mrhlpr checkout N' first.")
         exit(1)
+    target_branch = get_status(mr_id)["target_branch"]
 
     os.putenv("MRHLPR_MSG_FILTER_MR_ID", str(mr_id))
     script = os.path.realpath(os.path.realpath(__file__) +
@@ -308,7 +309,7 @@ def fixmsg(mr_id):
     try:
         git.run(["filter-branch", "-f", "--msg-filter", script,
                  "--commit-filter", "git commit-tree -S \"$@\"",
-                 "origin/master..HEAD"])
+                 f"origin/{target_branch}..HEAD"])
     except subprocess.CalledProcessError:
         print("ERROR: git filter-branch failed. Do you have git commit signing"
               " set up properly? (Run with -v to see the failing command.)")

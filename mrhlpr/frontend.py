@@ -34,6 +34,7 @@ def print_status(mr_id, no_cache=False):
     commits = []
     commits_have_id = None
     commits_are_signed = None
+    target_branch = status["target_branch"]
 
     # Generate URL
     origin = gitlab.parse_git_origin()
@@ -45,9 +46,9 @@ def print_status(mr_id, no_cache=False):
     print()
     print("\"" + status["title"] + "\"" + " (MR " + str(mr_id) + ")")
     if is_checked_out:
-        is_rebased = git.is_rebased()
+        is_rebased = git.is_rebased(target_branch)
         clean_worktree = git.clean_worktree()
-        commits = git.commits_on_top_of()
+        commits = git.commits_on_top_of(target_branch)
         commits_have_id = mr.commits_have_mr_id(commits, mr_id)
         commits_follow_format, subj_err = mr.commits_follow_format(commits)
         commits_are_signed = mr.commits_are_signed(commits)
@@ -80,13 +81,13 @@ def print_status(mr_id, no_cache=False):
     else:
         print("[NOK] Clean worktree")
 
-    # Rebase on master
+    # Rebase on target branch
     if is_rebased is None:
-        print("[???] Rebase on master")
+        print(f"[???] Rebase on {target_branch}")
     elif is_rebased:
-        print("[OK ] Rebase on master")
+        print(f"[OK ] Rebase on {target_branch}")
     else:
-        print("[NOK] Rebase on master")
+        print(f"[NOK] Rebase on {target_branch}")
 
     # MR-ID in all commit messages
     if commits_have_id is None:
@@ -135,11 +136,12 @@ def print_status(mr_id, no_cache=False):
         return
 
     if len(commits) > 1:
-        print("* " + str(len(commits)) + " commits: consider squashing"
-              " ('git rebase -i origin/master')")
+        print(f"* {len(commits)} commits: consider squashing"
+              f" ('git rebase -i origin/{target_branch}')")
 
     if not is_rebased:
-        print("* Rebase on master ('git rebase origin/master')")
+        print(f"* Rebase on {target_branch} ('git"
+              f" rebase origin/{target_branch}')")
         print("* Check again ('mrhlpr status')")
         return
 
