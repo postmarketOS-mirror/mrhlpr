@@ -29,7 +29,7 @@ def get_status(mr_id, no_cache=False):
         :param no_cache: do not cache the API result for the merge request data
         :returns: a dict like:
                   {"title": "This is my first merge request",
-                   "branch": "mymr",
+                   "source_branch": "mymr",
                    "source": "ollieparanoid/mrhlpr",
                    "source_namespace": "ollieparanoid",
                    "allow_push": True,
@@ -70,14 +70,14 @@ def get_status(mr_id, no_cache=False):
         print("Invalid source_namespace: " + source_namespace)
         exit(1)
 
-    branch = api["source_branch"]
-    if (not re.compile(r"[a-zA-Z0-9/-_.]*").match(branch) or
-            branch.startswith("-")):
-        print("Invalid branch: " + branch)
+    source_branch = api["source_branch"]
+    if (not re.compile(r"[a-zA-Z0-9/-_.]*").match(source_branch) or
+            source_branch.startswith("-")):
+        print(f"Invalid branch: {source_branch}")
         exit(1)
 
     return {"title": api["title"],
-            "branch": branch,
+            "source_branch": source_branch,
             "source": source,
             "source_namespace": source_namespace,
             "allow_push": allow_push,
@@ -94,7 +94,7 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
     status = get_status(mr_id, no_cache)
     remote, repo = status["source"].split("/", 1)
     origin = gitlab.parse_git_origin()
-    branch = status["branch"]
+    branch = status["source_branch"]
 
     # Require clean worktree
     if not git.clean_worktree():

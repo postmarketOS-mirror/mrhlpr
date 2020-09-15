@@ -54,7 +54,7 @@ def print_status(mr_id, no_cache=False):
         print("{} commit{} from {}/{}".format(len(commits),
                                               "s" if len(commits) > 1 else "",
                                               status["source_namespace"],
-                                              status["branch"]))
+                                              status["source_branch"]))
     else:
         print("not checked out, from " + status["source"])
     print()
@@ -161,8 +161,8 @@ def print_status(mr_id, no_cache=False):
 
     print("* Pretty 'git log -" + str(len(commits)) + " --pretty'?" +
           " (consider copying MR desc)")
-    print("* Push your changes ('git push --force " + remote_local + " HEAD:" +
-          status["branch"] + "')")
+    print(f"* Push your changes ('git push --force {remote_local} HEAD:"
+          f"{status['source_branch']}')")
     print("* Web UI: comment about your reviewing and testing")
     print("* Web UI: approve MR")
     print("* Web UI: do (automatic) merge")
