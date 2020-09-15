@@ -45,7 +45,7 @@ def print_status(mr_id, no_cache=False):
     print()
     print("\"" + status["title"] + "\"" + " (MR " + str(mr_id) + ")")
     if is_checked_out:
-        is_rebased = git.is_rebased_on_master()
+        is_rebased = git.is_rebased()
         clean_worktree = git.clean_worktree()
         commits = git.commits_on_top_of_master()
         commits_have_id = mr.commits_have_mr_id(commits, mr_id)

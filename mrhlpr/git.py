@@ -55,9 +55,9 @@ def commits_on_top_of_master():
     return run(["rev-list", "origin/master..HEAD"]).splitlines()
 
 
-def is_rebased_on_master():
-    """ Check if the current branch needs to be rebased on master. """
-    return run(["rev-list", "--count", "HEAD..origin/master"]) == "0"
+def is_rebased(branch_name="master"):
+    """ Check if the current branch needs to be rebased on a given branch. """
+    return run(["rev-list", "--count", f"HEAD..origin/{branch_name}"]) == "0"
 
 
 def clean_worktree():
