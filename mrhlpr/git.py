@@ -50,9 +50,9 @@ def branch_remote(branch_name="HEAD"):
     return None
 
 
-def commits_on_top_of_master():
+def commits_on_top_of(branch_name="master"):
     """ :returns: list of commit ID strings """
-    return run(["rev-list", "origin/master..HEAD"]).splitlines()
+    return run(["rev-list", f"origin/{branch_name}..HEAD"]).splitlines()
 
 
 def is_rebased(branch_name="master"):

@@ -47,7 +47,7 @@ def print_status(mr_id, no_cache=False):
     if is_checked_out:
         is_rebased = git.is_rebased()
         clean_worktree = git.clean_worktree()
-        commits = git.commits_on_top_of_master()
+        commits = git.commits_on_top_of()
         commits_have_id = mr.commits_have_mr_id(commits, mr_id)
         commits_follow_format, subj_err = mr.commits_follow_format(commits)
         commits_are_signed = mr.commits_are_signed(commits)

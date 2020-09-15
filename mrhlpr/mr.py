@@ -208,7 +208,7 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
 
 def commits_have_mr_id(commits, mr_id):
     """ Check if all given commits have the MR-ID in the subject.
-        :param commits: return value from git.commits_on_top_of_master()
+        :param commits: return value from git.commits_on_top_of()
         :returns: True if the MR-ID is in each subject, False otherwise """
     for commit in commits:
         subject = git.run(["show", "-s", "--format=%s", commit])
@@ -219,7 +219,7 @@ def commits_have_mr_id(commits, mr_id):
 
 def commits_follow_format(commits):
     """ Check if the commit subjects follow the correct naming format.
-        :param commits: return value from git.commits_on_top_of_master()
+        :param commits: return value from git.commits_on_top_of()
         :returns: (result, subject_err)
                   result: True if the commits are formatted correctly, False if
                           something is obviously wrong and None if it is
@@ -279,7 +279,7 @@ def commits_follow_format(commits):
 
 def commits_are_signed(commits):
     """ Check if all given commits are signed.
-        :param commits: return value from git.commits_on_top_of_master()
+        :param commits: return value from git.commits_on_top_of()
         :returns: True if all are signed, False otherwise """
     for commit in commits:
         if not git.run(["verify-commit", commit], False):
