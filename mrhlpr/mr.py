@@ -30,6 +30,7 @@ def get_status(mr_id, no_cache=False):
         :returns: a dict like:
                   {"title": "This is my first merge request",
                    "source_branch": "mymr",
+                   "target_branch": "v20.05",
                    "source": "ollieparanoid/mrhlpr",
                    "source_namespace": "ollieparanoid",
                    "allow_push": True,
@@ -71,13 +72,16 @@ def get_status(mr_id, no_cache=False):
         exit(1)
 
     source_branch = api["source_branch"]
-    if (not re.compile(r"[a-zA-Z0-9/-_.]*").match(source_branch) or
-            source_branch.startswith("-")):
-        print(f"Invalid branch: {source_branch}")
-        exit(1)
+    target_branch = api["target_branch"]
+    for branch in [source_branch, target_branch]:
+        if (not re.compile(r"[a-zA-Z0-9/-_.]*").match(branch) or
+                branch.startswith("-")):
+            print(f"Invalid branch: {branch}")
+            exit(1)
 
     return {"title": api["title"],
             "source_branch": source_branch,
+            "target_branch": target_branch,
             "source": source,
             "source_namespace": source_namespace,
             "allow_push": allow_push,
