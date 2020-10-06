@@ -19,7 +19,9 @@ def run(parameters, check=True):
         ret = stdout.decode("utf-8").rstrip()
         logging.debug(ret)
         return ret
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as e:
+        ret = e.output.decode("utf-8").rstrip()
+        logging.debug(ret)
         if check:
             raise
         return None
