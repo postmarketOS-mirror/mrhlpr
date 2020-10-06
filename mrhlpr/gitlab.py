@@ -16,8 +16,9 @@ from . import git
 
 def download_json(pathname, no_cache=False):
     """ Download and parse JSON from an API, with a cache.
-        :pathname: gitlab URL pathname (without the usual prefix)
-        :no_cache: download again, even if already cached
+
+        :param pathname: gitlab URL pathname (without the usual prefix)
+        :param no_cache: download again, even if already cached
         :returns: parsed JSON """
     url = parse_git_origin()["api"] + pathname
 
@@ -57,6 +58,7 @@ def download_json(pathname, no_cache=False):
 
 def parse_git_origin():
     """ Parse the origin remote's URL, so it can easily be used in API calls.
+
         :returns: a dict like the following:
                   {"api": "https://gitlab.com/api/v4",
                    "api_project_id": "postmarketOS%2Fmrhlpr",

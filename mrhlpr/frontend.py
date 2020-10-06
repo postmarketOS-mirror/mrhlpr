@@ -19,6 +19,7 @@ def print_status(mr_id, no_cache=False):
     """ Print the merge request status. Most info is only visible, when the
         branch is checked out locally. Always display a checklist of things to
         do next, in order to get the MR shipped.
+
         :param mr_id: merge request ID
         :param no_cache: do not cache the API result for the merge request data
     """

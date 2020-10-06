@@ -8,8 +8,10 @@ import logging
 
 def run(parameters, check=True):
     """ Run a git command.
-        :parameters: list of arguments to pass to git
-        :check: when set to True, raise an exception on exit code not being 0
+
+        :param parameters: list of arguments to pass to git
+        :param check: when set to True, raise an exception on exit code not
+                      being 0
         :returns: on success: output of the command (last new line removed)
                   on failure: None """
     try:
@@ -45,7 +47,7 @@ def branch_current():
 
 
 def branch_remote(branch_name="HEAD"):
-    ''' :returns: remote name, or None'''
+    """ :returns: remote name, or None"""
     upstream = run(["rev-parse", "--abbrev-ref", branch_name + "@{u}"], False)
     if upstream:
         return upstream.split("/", 1)[0]

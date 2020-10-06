@@ -25,6 +25,7 @@ def get_status(mr_id, no_cache=False):
     """ Get merge request related information from the GitLab API.
         To hack on this, run mrhlpr with -v to get the cached JSON files
         location. Then you can take a look at the data returned from the API.
+
         :param mr_id: merge request ID
         :param no_cache: do not cache the API result for the merge request data
         :returns: a dict like:
@@ -91,6 +92,7 @@ def get_status(mr_id, no_cache=False):
 def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
     """ Add the MR's source repository as git remote, fetch it and checkout the
         branch used in the merge request.
+
         :param mr_id: merge request ID
         :param no_cache: do not cache the API result for the merge request data
         :param fetch: always fetch the source repository
@@ -212,6 +214,7 @@ def checkout(mr_id, no_cache=False, fetch=False, overwrite_remote=False):
 
 def commits_have_mr_id(commits, mr_id):
     """ Check if all given commits have the MR-ID in the subject.
+
         :param commits: return value from git.commits_on_top_of()
         :returns: True if the MR-ID is in each subject, False otherwise """
     for commit in commits:
@@ -223,6 +226,7 @@ def commits_have_mr_id(commits, mr_id):
 
 def commits_follow_format(commits):
     """ Check if the commit subjects follow the correct naming format.
+
         :param commits: return value from git.commits_on_top_of()
         :returns: (result, subject_err)
                   result: True if the commits are formatted correctly, False if
@@ -283,6 +287,7 @@ def commits_follow_format(commits):
 
 def commits_are_signed(commits):
     """ Check if all given commits are signed.
+
         :param commits: return value from git.commits_on_top_of()
         :returns: True if all are signed, False otherwise """
     for commit in commits:
@@ -293,6 +298,7 @@ def commits_are_signed(commits):
 
 def fixmsg(mr_id):
     """ Add the MR-ID in each commit of the MR.
+
         :param mr_id: merge request ID """
     if not mr_id:
         print("ERROR: no merge request is currently checked out.")
