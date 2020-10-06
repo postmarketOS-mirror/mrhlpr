@@ -314,6 +314,7 @@ def fixmsg(mr_id):
     try:
         env = os.environ.copy()
         env["MRHLPR_MSG_FILTER_MR_ID"] = str(mr_id)
+        env["FILTER_BRANCH_SQUELCH_WARNING"] = "1"
         git.run(["filter-branch", "-f", "--msg-filter", script,
                  "--commit-filter", "git commit-tree -S \"$@\"",
                  f"origin/{target_branch}..HEAD"], env=env)
