@@ -6,17 +6,18 @@ import subprocess
 import logging
 
 
-def run(parameters, check=True):
+def run(parameters, env=None, check=True):
     """ Run a git command.
 
         :param parameters: list of arguments to pass to git
+        :param env: environment variables passed to the process
         :param check: when set to True, raise an exception on exit code not
                       being 0
         :returns: on success: output of the command (last new line removed)
                   on failure: None """
     try:
         logging.debug("+ git " + " ".join(parameters))
-        stdout = subprocess.check_output(["git"] + parameters,
+        stdout = subprocess.check_output(["git"] + parameters, env=env,
                                          stderr=subprocess.STDOUT)
         ret = stdout.decode("utf-8").rstrip()
         logging.debug(ret)
@@ -48,7 +49,8 @@ def branch_current():
 
 def branch_remote(branch_name="HEAD"):
     """ :returns: remote name, or None"""
-    upstream = run(["rev-parse", "--abbrev-ref", branch_name + "@{u}"], False)
+    upstream = run(["rev-parse", "--abbrev-ref", branch_name + "@{u}"],
+                   check=False)
     if upstream:
         return upstream.split("/", 1)[0]
     return None

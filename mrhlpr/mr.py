@@ -291,7 +291,7 @@ def commits_are_signed(commits):
         :param commits: return value from git.commits_on_top_of()
         :returns: True if all are signed, False otherwise """
     for commit in commits:
-        if not git.run(["verify-commit", commit], False):
+        if not git.run(["verify-commit", commit], check=False):
             return False
     return True
 
@@ -306,16 +306,17 @@ def fixmsg(mr_id):
         exit(1)
     target_branch = get_status(mr_id)["target_branch"]
 
-    os.putenv("MRHLPR_MSG_FILTER_MR_ID", str(mr_id))
     script = os.path.realpath(os.path.realpath(__file__) +
                               "/../data/msg_filter.py")
     os.chdir(git.run(["rev-parse", "--show-toplevel"]))
 
     print("Appending ' (MR " + str(mr_id) + ")' to commits and signing them...")  # noqa: E501
     try:
+        env = os.environ.copy()
+        env["MRHLPR_MSG_FILTER_MR_ID"] = str(mr_id)
         git.run(["filter-branch", "-f", "--msg-filter", script,
                  "--commit-filter", "git commit-tree -S \"$@\"",
-                 f"origin/{target_branch}..HEAD"])
+                 f"origin/{target_branch}..HEAD"], env=env)
     except subprocess.CalledProcessError:
         print("ERROR: git filter-branch failed. Do you have git commit signing"
               " set up properly? (Run with -v to see the failing command.)")
